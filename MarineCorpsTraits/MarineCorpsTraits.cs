@@ -42,6 +42,10 @@ namespace MarineCorpsTraits
         /// </summary>
         protected abstract void ApplyTemplate();
 
+        /// <summary>
+        /// Remove any Marines / WarHero traits (all degrees).
+        /// Used before we enforce the correct trait for this gene.
+        /// </summary>
         protected void RemoveMarineLikeTraits()
         {
             if (pawn?.story?.traits == null) return;
@@ -62,6 +66,47 @@ namespace MarineCorpsTraits
             {
                 traitSet.RemoveTrait(tr);
             }
+        }
+
+        /// <summary>
+        /// Ensure pawn ends up with exactly one instance of the given trait (and degree, if provided).
+        /// Removes any existing copies first, then adds the specified one.
+        /// </summary>
+        protected void EnsureTrait(string traitDefName, int? degree = null)
+        {
+            if (pawn?.story?.traits == null) return;
+
+            TraitSet traitSet = pawn.story.traits;
+            TraitDef def = DefDatabase<TraitDef>.GetNamedSilentFail(traitDefName);
+            if (def == null)
+            {
+                Log.Error($"[MarineCorpsTraits] Could not find TraitDef '{traitDefName}' to apply to {pawn}.");
+                return;
+            }
+
+            // Remove any existing instances of this trait
+            var toRemove = new List<Trait>();
+            foreach (Trait tr in traitSet.allTraits)
+            {
+                if (tr.def == def)
+                    toRemove.Add(tr);
+            }
+            foreach (Trait tr in toRemove)
+            {
+                traitSet.RemoveTrait(tr);
+            }
+
+            // Add the desired version
+            Trait newTrait;
+            if (degree.HasValue)
+            {
+                newTrait = new Trait(def, degree.Value, true);
+            }
+            else
+            {
+                newTrait = new Trait(def);
+            }
+            traitSet.GainTrait(newTrait);
         }
 
         protected void SetAllSkills(int level)
@@ -100,6 +145,9 @@ namespace MarineCorpsTraits
             // Remove all Marine/Corpsman/WarHero traits
             RemoveMarineLikeTraits();
 
+            // Ensure WarHero trait is present
+            EnsureTrait("WarHero");
+
             // All skills to 20
             SetAllSkills(20);
         }
@@ -118,6 +166,9 @@ namespace MarineCorpsTraits
 
             // Remove all Marine/Corpsman/WarHero traits
             RemoveMarineLikeTraits();
+
+            // Ensure Marines trait (degree 1 = Marine)
+            EnsureTrait("Marines", degree: 1);
 
             // Base: everything 10
             SetAllSkills(10);
@@ -144,6 +195,9 @@ namespace MarineCorpsTraits
 
             // Remove all Marine/Corpsman/WarHero traits
             RemoveMarineLikeTraits();
+
+            // Ensure Marines trait (degree 2 = Corpsman)
+            EnsureTrait("Marines", degree: 2);
 
             // Base: everything 10
             SetAllSkills(10);
