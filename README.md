@@ -1,0 +1,2 @@
+# MarineCorpsTraits
+Rimworld MarineCorps Traits
