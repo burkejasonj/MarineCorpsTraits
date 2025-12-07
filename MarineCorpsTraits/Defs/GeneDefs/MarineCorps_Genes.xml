@@ -88,7 +88,9 @@
     <biostatMet>5</biostatMet>
     <biostatArc>4</biostatArc>
 
-    <!-- Force War Hero trait -->
+    <!-- Hook to the C# gene -->
+    <geneClass>MarineCorpsTraits.Gene_AllSkills20_RemoveMarines</geneClass>
+
     <forcedTraits>
       <li>
         <def>WarHero</def>
@@ -98,7 +100,9 @@
     <customEffectDescriptions>
       <li>Forces the War Hero trait.</li>
       <li>Applies all bonuses of the War Hero trait through genetic engineering.</li>
+      <li>Overwrites prior Marine/Corpsman conditioning and perfects all skills.</li>
     </customEffectDescriptions>
   </GeneDef>
+
 
 </Defs>

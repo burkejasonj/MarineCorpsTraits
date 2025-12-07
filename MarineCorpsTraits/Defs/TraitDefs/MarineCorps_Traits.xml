@@ -131,7 +131,7 @@
           <IncomingDamageFactor>-0.9</IncomingDamageFactor>
 
           <!-- TOXIC IMMUNITY & RESISTANCE (Biotech) -->
-          <ToxicSensitivity>-1</ToxicSensitivity>
+          <!-- <ToxicSensitivity>-1</ToxicSensitivity> -->
           <ToxicResistance MayRequire="Ludeon.RimWorld.Biotech">9999</ToxicResistance>
           <ToxicEnvironmentResistance MayRequire="Ludeon.RimWorld.Biotech">9999</ToxicEnvironmentResistance>
 
